@@ -1,31 +1,37 @@
 package com.pinheirostec.gestor_core.repository.entity;
 
 import com.pinheirostec.gestor_core.domain.enumeration.Medida;
-import com.pinheirostec.gestor_core.domain.produto.Estoque;
 import com.pinheirostec.gestor_core.domain.produto.Grupo;
-import com.pinheirostec.gestor_core.domain.produto.Preco;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import org.springframework.boot.autoconfigure.web.WebProperties;
-import org.springframework.data.annotation.Id;
 
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+
+@Getter
+@Setter
 @Entity
 public class ProdutoEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idProduto;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @Column(nullable = false, name = "name")
     private String nomeProduto;
     private String descricaoProduto;
-    private Preco precos;
-    private Estoque estoques;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "id_preco", referencedColumnName = "idPreco")
+    private PrecoEntity preco;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn (name = "id_estoque", referencedColumnName = "idEstoque")
+    private EstoqueEntity estoque;
     private boolean ativo = true;
     private String codBarras;
     private String codPersonalizado;
+    @Enumerated(EnumType.STRING)
     private Medida unidadeMedida;
     private String marca;
-    private Grupo grupo;
+   // private Grupo grupo;
 
 }
